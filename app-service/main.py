@@ -2,6 +2,7 @@ import pika
 import time
 from random import randint
 import os
+import json
 
 SLEEP_TIME = 10
 RABBITMQ_HOST = os.getenv('RABBITMQ_HOST', '127.0.0.1')
@@ -9,10 +10,14 @@ RABBITMQ_HOST = os.getenv('RABBITMQ_HOST', '127.0.0.1')
 
 def callback(ch, method, properties, body):
     print(f"[*] Recebido: {body}")
-    ch.basic_ack(delivery_tag=method.delivery_tag)
+    customer = json.loads(body.decode())
+    if customer['name'] == 'Teste':
+        ch.basic_reject(delivery_tag=method.delivery_tag, requeue=True)
+    else:
+        ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
-print("[*] Conectando no servidor  ...")
+print("[*] Conectando no servidor  ... ")
 connection = pika.BlockingConnection(pika.ConnectionParameters(host=RABBITMQ_HOST))
 channel = connection.channel()
 channel.basic_qos(prefetch_count=1)

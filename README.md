@@ -9,6 +9,7 @@
 - [x] Criar Model
 - [x] Criar faker
 - [x] Criar comunicação com fila simples
+- [x] Criar fila dead letter
 - [ ] Criar métodos de processamento
 - [ ] Adicionar apps ao compose
 - [ ] Criar diagrama de fluxo

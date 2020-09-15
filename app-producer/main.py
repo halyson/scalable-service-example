@@ -9,7 +9,14 @@ RABBITMQ_HOST = os.getenv('RABBITMQ_HOST', '127.0.0.1')
 connection = pika.BlockingConnection(
     pika.ConnectionParameters(host=RABBITMQ_HOST))
 channel = connection.channel()
-channel.queue_declare(queue='customer_analysis', durable=True)
+
+channel.queue_declare(queue='customer_analysis', durable=True,
+                      arguments={
+                          'x-message-ttl': 5000,
+                          'x-dead-letter-exchange': 'customer_analysis_dlx',
+                          "x-dead-letter-routing-key": "customer_analysis_dlq",  # if not specified, queue's routing-key is used
+                      }
+                      )
 
 
 for customer in Customer.select():
