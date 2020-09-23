@@ -1,6 +1,6 @@
 import peewee
 
-db = peewee.SqliteDatabase('./data/customers_database.db')
+db = peewee.SqliteDatabase('data/customers_database.db')
 
 
 class Customer(peewee.Model):

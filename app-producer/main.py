@@ -2,6 +2,7 @@ import pika
 import os
 from customer import Customer
 import json
+from customer_faker import create_data_fake
 
 RABBITMQ_HOST = os.getenv('RABBITMQ_HOST', '127.0.0.1')
 
@@ -9,7 +10,6 @@ RABBITMQ_HOST = os.getenv('RABBITMQ_HOST', '127.0.0.1')
 connection = pika.BlockingConnection(pika.ConnectionParameters(host=RABBITMQ_HOST))
 
 channel = connection.channel()
-
 
 channel.exchange_declare(exchange='customer_analysis_dl.x', exchange_type='direct', durable=True)
 channel.exchange_declare(exchange='customer_analysis.x', exchange_type='direct', durable=True)
@@ -43,6 +43,8 @@ def rebase_customer(body):
     new_customer = Customer.create(id=customer['id'], name=customer['name'])
     new_customer.save(force_insert=True)
 
+
+create_data_fake()
 
 for customer in Customer.select():
     customer_data = {
