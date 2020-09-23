@@ -12,4 +12,10 @@
 - [x] Criar fila dead letter
 - [x] Criar métodos de processamento
 - [x] Adicionar apps ao compose
-- [ ] Criar diagrama de fluxo
+- [x] Criar diagrama de fluxo
+- [ ] Unificar database em um container e adicionar na stack
+- [ ] Ajustar producer para rodar a cada x tempo
+
+### Fluxo
+
+![Fluxo](/doc/fluxo.png)
