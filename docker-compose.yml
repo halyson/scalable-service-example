@@ -1,26 +1,6 @@
-version: "3"
+version: "3.8"
 
 services:
-  app-producer:
-    build: app-producer
-    depends_on:
-      - rabbitmq
-    restart: always
-    volumes:
-      - ./app-producer:/app
-    environment:
-      - PYTHONUNBUFFERED=1
-      - RABBITMQ_HOST=rabbitmq
-  app-service:
-    build: app-service
-    depends_on:
-      - rabbitmq
-    restart: always
-    volumes:
-      - ./app-service:/app
-    environment:
-      - PYTHONUNBUFFERED=1
-      - RABBITMQ_HOST=rabbitmq
   rabbitmq:
     image: "rabbitmq:3.8-management-alpine"
     restart: always
@@ -33,3 +13,25 @@ services:
       - ./rabbitmq/data:/var/lib/rabbitmq/mnesia
       - ./rabbitmq/rabbitmq.config:/etc/rabbitmq/rabbitmq.config
       - ./rabbitmq/definitions.json:/opt/definitions.json
+  app-producer:
+    image: app-producer:latest
+    depends_on:
+      - rabbitmq
+    restart: always
+    volumes:
+      - ./app-producer:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - RABBITMQ_HOST=rabbitmq
+  app-service:
+    image: app-service:latest
+    depends_on:
+      - rabbitmq
+    restart: always
+    deploy:
+      replicas: 4
+    volumes:
+      - ./app-service:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - RABBITMQ_HOST=rabbitmq
