@@ -1,6 +1,26 @@
 version: "3"
 
 services:
+  app-producer:
+    build: app-producer
+    depends_on:
+      - rabbitmq
+    restart: always
+    volumes:
+      - ./app-producer:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - RABBITMQ_HOST=rabbitmq
+  app-service:
+    build: app-service
+    depends_on:
+      - rabbitmq
+    restart: always
+    volumes:
+      - ./app-service:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - RABBITMQ_HOST=rabbitmq
   rabbitmq:
     image: "rabbitmq:3.8-management-alpine"
     restart: always
